@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120CD5E21C132FE8007CE39D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E11C132FE8007CE39D /* Account.swift */; };
+		120CD5E41C13FA00007CE39D /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E31C13FA00007CE39D /* Student.swift */; };
+		120CD5E61C1454CF007CE39D /* OnTheMapMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E51C1454CF007CE39D /* OnTheMapMapViewController.swift */; };
 		127554D31C1079DB00CA0077 /* OnTheMapConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */; };
+		129067901C1320D6004E79F8 /* OnTheMapTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1290678F1C1320D6004E79F8 /* OnTheMapTableViewController.swift */; };
+		12934C071C1D611E00FDECE9 /* SubmitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12934C061C1D611E00FDECE9 /* SubmitViewController.swift */; };
 		129D07831C10780F006F255E /* OnTheMapClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129D07821C10780F006F255E /* OnTheMapClient.swift */; };
 		12EA1BB61C06204300DE791D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EA1BB51C06204300DE791D /* AppDelegate.swift */; };
 		12EA1BB81C06204300DE791D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EA1BB71C06204300DE791D /* LoginViewController.swift */; };
@@ -37,7 +42,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		120CD5E11C132FE8007CE39D /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		120CD5E31C13FA00007CE39D /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
+		120CD5E51C1454CF007CE39D /* OnTheMapMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapMapViewController.swift; sourceTree = "<group>"; };
 		127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapConstants.swift; sourceTree = "<group>"; };
+		1290678F1C1320D6004E79F8 /* OnTheMapTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapTableViewController.swift; sourceTree = "<group>"; };
+		12934C061C1D611E00FDECE9 /* SubmitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitViewController.swift; sourceTree = "<group>"; };
 		129D07821C10780F006F255E /* OnTheMapClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapClient.swift; sourceTree = "<group>"; };
 		12EA1BB21C06204300DE791D /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12EA1BB51C06204300DE791D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +95,8 @@
 			children = (
 				129D07821C10780F006F255E /* OnTheMapClient.swift */,
 				127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */,
+				120CD5E11C132FE8007CE39D /* Account.swift */,
+				120CD5E31C13FA00007CE39D /* Student.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -146,6 +158,9 @@
 			isa = PBXGroup;
 			children = (
 				12EA1BB71C06204300DE791D /* LoginViewController.swift */,
+				1290678F1C1320D6004E79F8 /* OnTheMapTableViewController.swift */,
+				120CD5E51C1454CF007CE39D /* OnTheMapMapViewController.swift */,
+				12934C061C1D611E00FDECE9 /* SubmitViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -281,11 +296,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				120CD5E61C1454CF007CE39D /* OnTheMapMapViewController.swift in Sources */,
 				129D07831C10780F006F255E /* OnTheMapClient.swift in Sources */,
+				129067901C1320D6004E79F8 /* OnTheMapTableViewController.swift in Sources */,
 				12EA1BBE1C06204300DE791D /* OnTheMap.xcdatamodeld in Sources */,
 				12EA1BB81C06204300DE791D /* LoginViewController.swift in Sources */,
 				12EA1BB61C06204300DE791D /* AppDelegate.swift in Sources */,
+				12934C071C1D611E00FDECE9 /* SubmitViewController.swift in Sources */,
+				120CD5E41C13FA00007CE39D /* Student.swift in Sources */,
 				127554D31C1079DB00CA0077 /* OnTheMapConstants.swift in Sources */,
+				120CD5E21C132FE8007CE39D /* Account.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

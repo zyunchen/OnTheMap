@@ -13,12 +13,8 @@ extension OnTheMapClient {
     struct Constants {
         
         
-        static let baseUrl = "https://www.udacity.com/api/"
-        
-        // MARK: URLs
-        static let BaseURL : String = "http://api.themoviedb.org/3/"
-        static let BaseURLSecure : String = "https://api.themoviedb.org/3/"
-        static let AuthorizationURL : String = "https://www.themoviedb.org/authenticate/"
+        static let BaseUrl = "https://www.udacity.com/api/"
+        static let ParseBaseUrl = "https://api.parse.com/1/classes/"
         
     }
     
@@ -26,6 +22,7 @@ extension OnTheMapClient {
     struct Methods {
         
         static let GetSession = "session"
+        static let GetStudentLocation = "StudentLocation"
         
         // MARK: Account
         static let Account = "account"

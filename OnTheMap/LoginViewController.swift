@@ -21,22 +21,32 @@ class LoginViewController: UIViewController {
     var backgroundGradient: CAGradientLayer? = nil
     var tapRecognizer: UITapGestureRecognizer? = nil
     
-    var onTheMapClient:OnTheMapClient = OnTheMapClient()
+    var onTheMapClient:OnTheMapClient = OnTheMapClient.sharedInstance()
     
     
     
     // MARK: Login
     @IBAction func doLogin(sender: AnyObject) {
-        if email.text!.isEmpty {
-            debugLabel.text = "Username Empty."
-        } else if password.text!.isEmpty {
-            debugLabel.text = "Password Empty."
-        } else {
-            let body = "{\"udacity\": {\"username\": \"\(email.text!)\", \"password\": \"\(password.text!)\"}}"
+//        if email.text!.isEmpty {
+//            debugLabel.text = "Username Empty."
+//        } else if password.text!.isEmpty {
+//            debugLabel.text = "Password Empty."
+//        } else {
+//            let body = "{\"udacity\": {\"username\": \"\(email.text!)\", \"password\": \"\(password.text!)\"}}"
+            let body = "{\"udacity\": {\"username\": \"zh.yunchen@gmail.com\", \"password\": \"asdfqwert\"}}"
             let parameters : [String:AnyObject]? = ["test" : "nothing"]
             onTheMapClient.taskForPostMethod(OnTheMapClient.Methods.GetSession, body: body,parameters: parameters!, completionHandler: { (result, error) -> Void in
-                /* GUARD: Is the "request_token" key in parsedResult? */
+                print(result)
+                /* GUARD: Is the "session" key in parsedResult? */
                 guard let session = result["session"] as? [String : AnyObject] else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.debugLabel.text = "Login Failed (check your password and email)."
+                    }
+                    print("Cannot find key 'session' in \(result)")
+                    return
+                }
+                
+                guard let account = result["account"] as? [String : AnyObject] else {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.debugLabel.text = "Login Failed (check your password and email)."
                     }
@@ -47,20 +57,21 @@ class LoginViewController: UIViewController {
                 print("session is \(session)")
                 
                 /* 6. Use the data! */
-                self.appDelegate.session = session["id"] as? String
-                print("session is \(self.appDelegate.session)")
+//                self.appDelegate.session = session["id"] as? String
+                self.onTheMapClient.loginSession.id = (session["id"] as? String)!
+                self.onTheMapClient.loginAccount.key = (account["key"] as? String)!
+//                print("session is \(self.appDelegate.session)")
                 self.completeLogin()
             })
-        }
+//        }
         
     }
     
     // MARK: Sign Up
     @IBAction func doSignUp(sender: AnyObject) {
         self.debugLabel.text = ""
-        //TODO: change the indentifier
-        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("homeTabbarController") as! UITabBarController
-        self.presentViewController(controller, animated: true, completion: nil)
+//        UIApplication.sharedApplication().openURL(NSURL(string: "https://www.udacity.com/account/auth#!/signup")!)
+        onTheMapClient.openUrl("sdfsdf")
     }
     
     func completeLogin() {
@@ -94,7 +105,7 @@ class LoginViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        view.superview?.frame.origin.y = 0.0
         self.removeKeyboardDismissRecognizer()
         self.unsubscribeToKeyboardNotifications()
     }
@@ -182,13 +193,11 @@ extension LoginViewController {
     
     func keyboardWillShow(notification: NSNotification) {
         if(view.superview?.frame.origin.y == 0.0){
-            //            view.frame.origin.y -= getKeyboardHeight(notification) / 2
             view.superview?.frame.origin.y -= getKeyboardHeight(notification) / 2
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        //        view.frame.origin.y = 0.0
         view.superview?.frame.origin.y = 0.0
     }
     
