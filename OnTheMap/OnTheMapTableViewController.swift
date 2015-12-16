@@ -31,6 +31,13 @@ class OnTheMapTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func didLogout(sender: UIBarButtonItem) {
+        onTheMapClient.taskForDeleteMethod(OnTheMapClient.Methods.GetSession) { (result, error) -> Void in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+    }
     
     
     // MARK: - Table view data source

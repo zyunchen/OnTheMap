@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -149,7 +149,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="U6Q-J8-DAa">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="4Jw-eV-0ul"/>
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="4Jw-eV-0ul">
+                            <connections>
+                                <action selector="didLogout:" destination="jR7-bl-GQV" id="3sV-5t-ckR"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="LSY-bQ-bQF">
                                 <connections>
@@ -158,7 +162,6 @@
                             </barButtonItem>
                             <barButtonItem image="pin" id="EAl-ht-Dbq">
                                 <connections>
-                                    <action selector="setLocation:" destination="jR7-bl-GQV" id="NiM-dn-dSr"/>
                                     <segue destination="7G8-Sf-y3R" kind="presentation" id="nK1-UC-VMT"/>
                                 </connections>
                             </barButtonItem>
@@ -212,7 +215,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="On The Map" id="7Ie-6F-VIa">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="exa-fq-qfE"/>
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="exa-fq-qfE">
+                            <connections>
+                                <action selector="didLogout:" destination="oW5-oc-Fva" id="y83-BQ-GJH"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="uPg-i4-F6p">
                                 <connections>
@@ -267,18 +274,33 @@
                                         <color key="textColor" red="0.27673584220000003" green="0.3882593513" blue="0.60165590049999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="highlightedColor" red="0.13455258310000001" green="0.291302532" blue="0.54146701100000005" alpha="1" colorSpace="calibratedRGB"/>
                                     </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vIw-sh-jA0">
+                                        <rect key="frame" x="17" y="21" width="506" height="24"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <bool key="isElement" value="NO"/>
+                                        </accessibility>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="5hS-BD-Hbe"/>
+                                            <constraint firstAttribute="width" constant="506" id="IxO-V8-SMQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="IxO-V8-SMQ"/>
+                                            </mask>
+                                        </variation>
+                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lU0-L3-hrJ">
                                         <rect key="frame" x="531" y="21" width="48" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="48" id="v6N-6L-1IH"/>
+                                        </constraints>
                                         <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="didCancel:" destination="7G8-Sf-y3R" eventType="touchUpInside" id="lkY-Yg-jJe"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vIw-sh-jA0">
-                                        <rect key="frame" x="17" y="21" width="8" height="17"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.89091864936739873" green="0.92156862750000001" blue="0.91520505469617108" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -290,6 +312,7 @@
                                     <constraint firstAttribute="trailing" secondItem="lU0-L3-hrJ" secondAttribute="trailing" constant="21" id="VEP-Dp-Zrk"/>
                                     <constraint firstItem="GZF-zm-acw" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="top" constant="25" id="Xrx-0A-Xl6"/>
                                     <constraint firstItem="GZF-zm-acw" firstAttribute="centerX" secondItem="NX2-7G-aZA" secondAttribute="centerX" id="g9K-WX-8SG"/>
+                                    <constraint firstItem="lU0-L3-hrJ" firstAttribute="leading" secondItem="vIw-sh-jA0" secondAttribute="trailing" constant="8" id="i0P-Fg-6Ce"/>
                                     <constraint firstItem="TVo-hL-zi6" firstAttribute="top" secondItem="VfF-F9-G54" secondAttribute="bottom" constant="8" id="ozp-p2-UhA"/>
                                     <constraint firstItem="vIw-sh-jA0" firstAttribute="leading" secondItem="NX2-7G-aZA" secondAttribute="leading" constant="17" id="qCp-gO-Lwz"/>
                                     <constraint firstItem="VfF-F9-G54" firstAttribute="top" secondItem="GZF-zm-acw" secondAttribute="bottom" constant="8" id="uhR-9i-90Y"/>
@@ -456,6 +479,6 @@
         <image name="udacity" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nK1-UC-VMT"/>
+        <segue reference="ITw-bI-FSi"/>
     </inferredMetricsTieBreakers>
 </document>

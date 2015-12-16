@@ -31,8 +31,14 @@ class OnTheMapMapViewController: UIViewController,MKMapViewDelegate {
         }
     }
     
-    @IBAction func setLocation(sender: AnyObject) {
+    @IBAction func didLogout(sender: UIBarButtonItem) {
+        onTheMapClient.taskForDeleteMethod(OnTheMapClient.Methods.GetSession) { (result, error) -> Void in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
     }
+
     
     // MARK: - MKMapViewDelegate
     

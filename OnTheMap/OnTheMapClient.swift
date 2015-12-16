@@ -101,6 +101,70 @@ class OnTheMapClient : NSObject {
         return task
     }
     
+    // MARK: POST
+    
+    func taskForDeleteMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+        
+        
+        
+        //        /* 1. Set the parameters */
+        //        let methodParameters = [
+        //            "username": "",
+        //            "password":""
+        //        ]
+        
+        /* 2. Build the URL */
+        let urlString = Constants.BaseUrl + method
+        let url = NSURL(string: urlString)!
+        
+        /* 3. Configure the request */
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "DELETE"
+        
+        var xsrfCookie: NSHTTPCookie? = nil
+        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+        for cookie in sharedCookieStorage.cookies! as [NSHTTPCookie] {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                print("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                if let response = response as? NSHTTPURLResponse {
+                    print("Your request returned an invalid response! Status code: \(response.statusCode)!")
+                } else if let response = response {
+                    print("Your request returned an invalid response! Response: \(response)!")
+                } else {
+                    print("Your request returned an invalid response!")
+                }
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            OnTheMapClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+        }
+        task.resume()
+        
+        return task
+    }
+
+    
     // MARK: GET
     
     func taskForGetMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
@@ -162,8 +226,7 @@ class OnTheMapClient : NSObject {
     func doGetLists(completionHandler: () -> Void){
         
         taskForGetMethod(OnTheMapClient.Methods.GetStudentLocation) { (result, error) -> Void in
-            print(result)
-            /* GUARD: Is the "session" key in parsedResult? */
+            /* GUARD: Is the "results" key in parsedResult? */
             guard let students = result["results"] as? [[String:AnyObject]] else {
                 dispatch_async(dispatch_get_main_queue()) {
                     print("failed")
@@ -171,7 +234,6 @@ class OnTheMapClient : NSObject {
                 print("Cannot find key 'results' in \(result)")
                 return
             }
-            print("have \(students.count) students")
             
             for student in students {
                 let newstudent:Student = Student(dictionary: student)
