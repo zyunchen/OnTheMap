@@ -11,30 +11,57 @@ import MapKit
 
 class OnTheMapMapViewController: UIViewController,MKMapViewDelegate {
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var mapView: MKMapView!
     var onTheMapClient:OnTheMapClient = OnTheMapClient.sharedInstance()
     
     override func viewDidLoad() {
-        onTheMapClient.doGetLists { () -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.setAnnotations()
-            }
-            
-        }
+        
+        doGetLists()
     }
     
     @IBAction func refresh(sender: AnyObject) {
-        onTheMapClient.doGetLists { () -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.setAnnotations()
+        doGetLists()
             }
+    
+    func doGetLists(){
+        activityIndicator.startAnimating()
+        onTheMapClient.doGetLists { (errorString) -> Void in
+            if let errorString = errorString {
+                self.showAlert("Error", message:errorString)
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    if self.mapView.annotations.count > 0 {
+                        self.mapView.removeAnnotations(self.mapView.annotations)
+                    }
+                    self.setAnnotations()
+                }
+            }
+            print("indicator should be stoped")
+            self.activityIndicator.stopAnimating()
+            self.activityIndicator.hidden = true
         }
+
     }
     
     @IBAction func didLogout(sender: UIBarButtonItem) {
         onTheMapClient.taskForDeleteMethod(OnTheMapClient.Methods.GetSession) { (result, error) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
                 self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+    }
+    
+    //MARK: - Helper Methods
+    
+    func showAlert(title: String? , message: String?) {
+        dispatch_async(dispatch_get_main_queue()){
+            self.activityIndicator.stopAnimating()
+            if title != nil && message != nil {
+                let errorAlert =
+                UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                errorAlert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(errorAlert, animated: true, completion: nil)
             }
         }
     }
@@ -77,7 +104,6 @@ class OnTheMapMapViewController: UIViewController,MKMapViewDelegate {
     }
     
     func setAnnotations(){
-//        mapView.removeAnnotations(mapView.annotations)
         var annotations = [MKPointAnnotation]()
         for student in onTheMapClient.newStudents {
             let lat = CLLocationDegrees(student.latitude )

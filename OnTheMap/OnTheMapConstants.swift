@@ -22,7 +22,7 @@ extension OnTheMapClient {
     struct Methods {
         
         static let GetSession = "session"
-        static let GetStudentLocation = "StudentLocation"
+        static let GetStudentLocation = "StudentLocation?order=-updatedAt"
         
         // MARK: Account
         static let Account = "account"
@@ -41,6 +41,11 @@ extension OnTheMapClient {
         // MARK: Config
         static let Config = "configuration"
         
+    }
+    
+    struct Server {
+        static let UDACITY = 1
+        static let PARSE = 2
     }
 
 

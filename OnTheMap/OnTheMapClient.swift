@@ -22,6 +22,8 @@ class OnTheMapClient : NSObject {
     
     var newStudents = [Student]()
     
+
+    
     struct Session {
         var expiration:String = ""
         var id:String = ""
@@ -38,27 +40,95 @@ class OnTheMapClient : NSObject {
     
     // MARK: POST
     
-    func taskForPostMethod(method: String,body: String, parameters: [String : AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+    func taskForPostMethod(server:Int,method: String,body: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
-        
-        
-//        /* 1. Set the parameters */
-//        let methodParameters = [
-//            "username": "",
-//            "password":""
-//        ]
-        
-        /* 2. Build the URL */
-        let urlString = Constants.BaseUrl + method
+        var urlString:String
+        if server == Server.UDACITY {
+            urlString = Constants.BaseUrl + method
+        }else{
+            urlString = Constants.ParseBaseUrl + method
+        }
         let url = NSURL(string: urlString)!
         
         /* 3. Configure the request */
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)
+        if server == Server.UDACITY {
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }else{
+            request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+            request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
 
+        
+        
+        
+        
+        
+        /* 4. Make the request */
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                print("There was an error with your request: \(error)")
+                completionHandler(result: nil, error: nil)
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                if let response = response as? NSHTTPURLResponse {
+                    print("Your request returned an invalid response! Status code: \(response.statusCode)!")
+                } else if let response = response {
+                    print("Your request returned an invalid response! Response: \(response)!")
+                } else {
+                    print("Your request returned an invalid response!")
+                }
+                completionHandler(result: nil, error: nil)
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                print("No data was returned by the request!")
+                completionHandler(result: nil, error: nil)
+                return
+            }
+            
+            /* 5/6. Parse the data and use the data (happens in completion handler) */
+            if server == Server.UDACITY {
+                OnTheMapClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+            }else{
+                OnTheMapClient.parseOneJSONWithCompletionHandler(data, completionHandler: completionHandler)
+            }
+        }
+        
+        /* 7. Start the request */
+        task.resume()
+        
+        return task
+    }
+    
+    // MARK: PUT
+    
+    func taskForPUTMethod(method: String,body: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+        
+        var urlString:String
+        urlString = Constants.ParseBaseUrl + method
+        let url = NSURL(string: urlString)!
+        
+        /* 3. Configure the request */
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "PUT"
+        request.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        
         
         
         
@@ -92,7 +162,8 @@ class OnTheMapClient : NSObject {
             }
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
-            OnTheMapClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+
+            OnTheMapClient.parseOneJSONWithCompletionHandler(data, completionHandler: completionHandler)
         }
         
         /* 7. Start the request */
@@ -100,8 +171,9 @@ class OnTheMapClient : NSObject {
         
         return task
     }
+
     
-    // MARK: POST
+    // MARK: DELETE
     
     func taskForDeleteMethod(method: String, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
         
@@ -223,7 +295,7 @@ class OnTheMapClient : NSObject {
         return task
     }
     
-    func doGetLists(completionHandler: () -> Void){
+    func doGetLists(completionHandler: (errorString:String?) -> Void){
         
         taskForGetMethod(OnTheMapClient.Methods.GetStudentLocation) { (result, error) -> Void in
             /* GUARD: Is the "results" key in parsedResult? */
@@ -232,15 +304,18 @@ class OnTheMapClient : NSObject {
                     print("failed")
                 }
                 print("Cannot find key 'results' in \(result)")
+                completionHandler(errorString: "get data failed")
                 return
             }
+            
+            self.newStudents.removeAll()
             
             for student in students {
                 let newstudent:Student = Student(dictionary: student)
                 self.newStudents.append(newstudent)
                 
             }
-            completionHandler()
+            completionHandler(errorString: nil)
             
         }
         

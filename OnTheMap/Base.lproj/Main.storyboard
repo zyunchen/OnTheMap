@@ -78,6 +78,9 @@
                                     <action selector="doSignUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XSr-XO-h3A"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="vtM-8a-cZC">
+                                <rect key="frame" x="290" y="410" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.99215686274509807" green="0.46274509803921571" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -88,8 +91,10 @@
                             <constraint firstAttribute="trailingMargin" secondItem="1oz-7z-v9K" secondAttribute="trailing" constant="80" id="CaK-Ey-QRT"/>
                             <constraint firstItem="CgX-C5-hVT" firstAttribute="width" secondItem="1oz-7z-v9K" secondAttribute="width" id="DCr-3G-JC5"/>
                             <constraint firstItem="VtB-H1-9Mr" firstAttribute="top" secondItem="CgX-C5-hVT" secondAttribute="bottom" constant="38" id="H7h-of-5tn"/>
+                            <constraint firstItem="vtM-8a-cZC" firstAttribute="top" secondItem="CgX-C5-hVT" secondAttribute="bottom" constant="10" id="Hue-AR-mBo"/>
                             <constraint firstItem="CgX-C5-hVT" firstAttribute="top" secondItem="1oz-7z-v9K" secondAttribute="bottom" constant="26" id="OVm-RG-oRf"/>
                             <constraint firstItem="1oz-7z-v9K" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Px9-fp-9FY"/>
+                            <constraint firstItem="vtM-8a-cZC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="RWZ-f1-U9w"/>
                             <constraint firstItem="wPp-Fl-VDt" firstAttribute="top" secondItem="VtB-H1-9Mr" secondAttribute="bottom" constant="61" id="Wbw-OS-stE"/>
                             <constraint firstItem="1oz-7z-v9K" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="80" id="YKa-aR-mtE"/>
                             <constraint firstItem="dG4-a7-DiQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Yn6-TJ-aTs"/>
@@ -111,9 +116,11 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="vtM-8a-cZC" id="N9g-VZ-HEL"/>
                         <outlet property="debugLabel" destination="Z7t-fA-u1M" id="NIF-ti-mQL"/>
                         <outlet property="email" destination="1oz-7z-v9K" id="MiP-Dc-9rl"/>
                         <outlet property="headerTextLabel" destination="dG4-a7-DiQ" id="BGE-Co-DhK"/>
+                        <outlet property="loginButton" destination="VtB-H1-9Mr" id="zru-FB-8Xe"/>
                         <outlet property="password" destination="CgX-C5-hVT" id="KNj-OU-83P"/>
                     </connections>
                 </viewController>
@@ -139,11 +146,16 @@
                                     <outlet property="delegate" destination="jR7-bl-GQV" id="WxQ-Rk-9nK"/>
                                 </connections>
                             </mapView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="5xh-vZ-55i">
+                                <rect key="frame" x="291" y="289" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="9uR-4T-0qi" firstAttribute="top" secondItem="uMu-RB-SY3" secondAttribute="bottom" id="S1E-Xb-Hi2"/>
+                            <constraint firstItem="5xh-vZ-55i" firstAttribute="centerX" secondItem="BzK-K5-Rjf" secondAttribute="centerX" id="hfg-Vm-RAO"/>
                             <constraint firstAttribute="trailing" secondItem="uMu-RB-SY3" secondAttribute="trailing" id="hq1-0j-ixa"/>
+                            <constraint firstItem="5xh-vZ-55i" firstAttribute="centerY" secondItem="BzK-K5-Rjf" secondAttribute="centerY" id="lqy-hV-QE6"/>
                             <constraint firstItem="uMu-RB-SY3" firstAttribute="top" secondItem="MKR-mj-6vq" secondAttribute="bottom" id="pBI-67-X1C"/>
                             <constraint firstItem="uMu-RB-SY3" firstAttribute="leading" secondItem="BzK-K5-Rjf" secondAttribute="leading" id="wO7-sV-F34"/>
                         </constraints>
@@ -168,6 +180,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="5xh-vZ-55i" id="8Kc-Th-ob6"/>
                         <outlet property="mapView" destination="uMu-RB-SY3" id="g6e-C9-yDZ"/>
                     </connections>
                 </viewController>
@@ -365,6 +378,17 @@
                             <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="BOl-h8-gcr">
                                 <rect key="frame" x="0.0" y="156" width="600" height="444"/>
                             </mapView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p3q-pl-Nwq">
+                                <rect key="frame" x="271" y="453" width="58" height="34"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Submit">
+                                    <color key="titleColor" red="0.0727358217592593" green="0.010074464979292605" blue="0.056432220024947015" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didSubmit:" destination="7G8-Sf-y3R" eventType="touchUpInside" id="pDL-VQ-yrU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.32549019607843138" green="0.54117647058823526" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -382,8 +406,10 @@
                             <constraint firstItem="NFa-eK-GcD" firstAttribute="top" secondItem="ybA-gd-gtB" secondAttribute="bottom" id="gue-Ub-kby"/>
                             <constraint firstItem="NX2-7G-aZA" firstAttribute="trailing" secondItem="ybA-gd-gtB" secondAttribute="trailing" id="hfF-HL-kil"/>
                             <constraint firstItem="BOl-h8-gcr" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="bottom" constant="-2" id="mo2-a2-4hS"/>
+                            <constraint firstItem="p3q-pl-Nwq" firstAttribute="top" secondItem="BOl-h8-gcr" secondAttribute="bottom" constant="-147" id="nyi-bh-nJE"/>
                             <constraint firstItem="LKP-fQ-RBN" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="bottom" constant="15" id="o4e-aB-lOq"/>
                             <constraint firstItem="NX2-7G-aZA" firstAttribute="leading" secondItem="1ey-Rr-FQB" secondAttribute="leading" id="rBt-LS-hj5"/>
+                            <constraint firstItem="p3q-pl-Nwq" firstAttribute="centerX" secondItem="BOl-h8-gcr" secondAttribute="centerX" id="rwJ-PS-FXO"/>
                             <constraint firstAttribute="bottom" secondItem="BOl-h8-gcr" secondAttribute="bottom" id="rwc-qQ-PGm"/>
                             <constraint firstItem="LKP-fQ-RBN" firstAttribute="leading" secondItem="1ey-Rr-FQB" secondAttribute="leading" constant="203" id="sIo-6Q-VZB"/>
                             <constraint firstItem="ybA-gd-gtB" firstAttribute="leading" secondItem="1ey-Rr-FQB" secondAttribute="leading" id="uaJ-gF-mY7"/>
@@ -408,6 +434,7 @@
                         <outlet property="label3" destination="TVo-hL-zi6" id="Jxc-Po-8rx"/>
                         <outlet property="locationTextField" destination="LKP-fQ-RBN" id="kpo-mR-vyq"/>
                         <outlet property="mapView" destination="BOl-h8-gcr" id="XKN-Js-Wwo"/>
+                        <outlet property="submitButton" destination="p3q-pl-Nwq" id="MVw-bw-cFz"/>
                         <outlet property="urlTextField" destination="vIw-sh-jA0" id="DYh-fo-9Jk"/>
                     </connections>
                 </viewController>
@@ -479,6 +506,6 @@
         <image name="udacity" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ITw-bI-FSi"/>
+        <segue reference="nK1-UC-VMT"/>
     </inferredMetricsTieBreakers>
 </document>

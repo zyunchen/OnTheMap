@@ -14,6 +14,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var debugLabel: UILabel!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var appDelegate: AppDelegate!
     var session: NSURLSession!
@@ -27,22 +29,28 @@ class LoginViewController: UIViewController {
     
     // MARK: Login
     @IBAction func doLogin(sender: AnyObject) {
-//        if email.text!.isEmpty {
-//            debugLabel.text = "Username Empty."
-//        } else if password.text!.isEmpty {
-//            debugLabel.text = "Password Empty."
-//        } else {
-//            let body = "{\"udacity\": {\"username\": \"\(email.text!)\", \"password\": \"\(password.text!)\"}}"
-            let body = "{\"udacity\": {\"username\": \"zh.yunchen@gmail.com\", \"password\": \"asdfqwert\"}}"
-            let parameters : [String:AnyObject]? = ["test" : "nothing"]
-            onTheMapClient.taskForPostMethod(OnTheMapClient.Methods.GetSession, body: body,parameters: parameters!, completionHandler: { (result, error) -> Void in
+        if email.text!.isEmpty {
+            debugLabel.text = "Username Empty."
+        } else if password.text!.isEmpty {
+            debugLabel.text = "Password Empty."
+        } else {
+            let body = "{\"udacity\": {\"username\": \"\(email.text!)\", \"password\": \"\(password.text!)\"}}"
+        loginButton.enabled = false
+        self.activityIndicator.startAnimating()
+            onTheMapClient.taskForPostMethod(OnTheMapClient.Server.UDACITY,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
+                
+                guard result != nil else{
+                    self.showError("Error", message: "login failed")
+                    return
+                }
+                
                 print(result)
                 /* GUARD: Is the "session" key in parsedResult? */
                 guard let session = result["session"] as? [String : AnyObject] else {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.debugLabel.text = "Login Failed (check your password and email)."
                     }
-                    print("Cannot find key 'session' in \(result)")
+                    self.showError("Error", message: "Unable to login")
                     return
                 }
                 
@@ -50,7 +58,7 @@ class LoginViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.debugLabel.text = "Login Failed (check your password and email)."
                     }
-                    print("Cannot find key 'session' in \(result)")
+                    self.showError("Error", message: "Unable to login")
                     return
                 }
                 
@@ -62,8 +70,10 @@ class LoginViewController: UIViewController {
                 self.onTheMapClient.loginAccount.key = (account["key"] as? String)!
 //                print("session is \(self.appDelegate.session)")
                 self.completeLogin()
+                self.loginButton.enabled = true
+                self.activityIndicator.stopAnimating()
             })
-//        }
+        }
         
     }
     
@@ -108,6 +118,19 @@ class LoginViewController: UIViewController {
         view.superview?.frame.origin.y = 0.0
         self.removeKeyboardDismissRecognizer()
         self.unsubscribeToKeyboardNotifications()
+    }
+    
+    func showError(title: String? , message: String?) {
+        dispatch_async(dispatch_get_main_queue()){
+            self.activityIndicator.stopAnimating()
+            self.loginButton.enabled = true
+            if title != nil && message != nil {
+                let errorAlert =
+                UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                errorAlert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(errorAlert, animated: true, completion: nil)
+            }
+        }
     }
     
 }

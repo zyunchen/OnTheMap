@@ -15,26 +15,42 @@ class OnTheMapTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        onTheMapClient.doGetLists { () -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.tableView.reloadData()
-            }
-
-        }
+        doGetLists()
     }
     @IBAction func refresh(sender: UIBarButtonItem) {
-        onTheMapClient.doGetLists { () -> Void in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.tableView.reloadData()
+        doGetLists()
+    }
+    
+    func doGetLists(){
+        onTheMapClient.doGetLists { (errorString) -> Void in
+            if let errorString = errorString {
+                self.showAlert("Error", message:errorString)
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tableView.reloadData()
+                }
             }
-            
         }
+
     }
     
     @IBAction func didLogout(sender: UIBarButtonItem) {
         onTheMapClient.taskForDeleteMethod(OnTheMapClient.Methods.GetSession) { (result, error) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
                 self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+    }
+    
+    //MARK: - Helper Methods
+    
+    func showAlert(title: String? , message: String?) {
+        dispatch_async(dispatch_get_main_queue()){
+            if title != nil && message != nil {
+                let errorAlert =
+                UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                errorAlert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(errorAlert, animated: true, completion: nil)
             }
         }
     }

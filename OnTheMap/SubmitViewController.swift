@@ -18,8 +18,11 @@ class SubmitViewController: UIViewController {
     @IBOutlet weak var label1: UILabel!
     @IBOutlet weak var label2: UILabel!
     @IBOutlet weak var label3: UILabel!
+    @IBOutlet weak var submitButton: UIButton!
     
     var tapRecognizer: UITapGestureRecognizer? = nil
+    var onTheMapClient:OnTheMapClient = OnTheMapClient.sharedInstance()
+    var loc:CLLocationCoordinate2D?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,16 +35,23 @@ class SubmitViewController: UIViewController {
     }
     
     @IBAction func didSearchLocation(sender: UIButton) {
+        if locationTextField.text!.isEmpty{
+            showAlert("ERROR", message: "Enter a location")
+            return
+        }
         mapView.hidden = false
         label1.hidden = true
         label2.hidden = true
         label3.hidden = true
         urlTextField.hidden = false
+        submitButton.hidden = false
        
         locationEncode(locationTextField.text!,complete:{(loc) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = loc
+                self.loc = loc
+                print("loc is \(loc)")
                 self.mapView.addAnnotation(annotation)
                 self.mapView.setRegion(MKCoordinateRegionMakeWithDistance(loc, 15000, 15000), animated: true)
             }
@@ -54,6 +64,52 @@ class SubmitViewController: UIViewController {
     @IBAction func didCancel(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    @IBAction func didSubmit(sender: UIButton) {
+        guard let loc = loc else{
+            //TODO
+            return
+        }
+        let body = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Cupertino, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": \(loc.latitude), \"longitude\": \(loc.longitude)}"
+        print("body is \(body)")
+        onTheMapClient.taskForPostMethod(OnTheMapClient.Server.PARSE,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
+            print(result)
+            /* GUARD: Is the "session" key in parsedResult? */
+//            guard let session = result["session"] as? [String : AnyObject] else {
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    
+//                }
+//                print("Cannot find key 'session' in \(result)")
+//                return
+//            }
+            
+//            guard let account = result["account"] as? [String : AnyObject] else {
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    
+//                }
+//                print("Cannot find key 'session' in \(result)")
+//                return
+//            }
+            
+//            print("session is \(session)")
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+
+        
+    }
+    
+    //Shows alert and stops activity indicator
+    func showAlert(title: String? , message: String?) {
+        dispatch_async(dispatch_get_main_queue()){
+            if title != nil && message != nil {
+                let errorAlert =
+                UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                errorAlert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(errorAlert, animated: true, completion: nil)
+            }
+        }
+    }
+    
 
     
     override func viewWillAppear(animated: Bool) {
@@ -63,6 +119,7 @@ class SubmitViewController: UIViewController {
         label2.hidden = false
         label3.hidden = false
         urlTextField.hidden = true
+        submitButton.hidden = true
         self.addKeyboardDismissRecognizer()
     }
     
