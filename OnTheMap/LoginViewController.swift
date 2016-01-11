@@ -34,13 +34,11 @@ class LoginViewController: UIViewController {
         } else if password.text!.isEmpty {
             debugLabel.text = "Password Empty."
         } else {
-            let body = "{\"udacity\": {\"username\": \"\(email.text!)\", \"password\": \"\(password.text!)\"}}"
-        loginButton.enabled = false
-        self.activityIndicator.startAnimating()
-            onTheMapClient.taskForPostMethod(OnTheMapClient.Server.UDACITY,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
-                
+            loginButton.enabled = false
+            self.activityIndicator.startAnimating()
+            onTheMapClient.loginWith(email.text!, password: password.text!, completionHandler: { (result, errorString) -> Void in
                 guard result != nil else{
-                    self.showError("Error", message: "login failed")
+                    self.showError("Error", message: errorString)
                     return
                 }
                 
@@ -50,7 +48,7 @@ class LoginViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.debugLabel.text = "Login Failed (check your password and email)."
                     }
-                    self.showError("Error", message: "Unable to login")
+                    self.showError("Error", message: errorString)
                     return
                 }
                 
@@ -58,20 +56,21 @@ class LoginViewController: UIViewController {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.debugLabel.text = "Login Failed (check your password and email)."
                     }
-                    self.showError("Error", message: "Unable to login")
+                    self.showError("Error", message: errorString)
                     return
                 }
                 
                 print("session is \(session)")
                 
                 /* 6. Use the data! */
-//                self.appDelegate.session = session["id"] as? String
+                //                self.appDelegate.session = session["id"] as? String
                 self.onTheMapClient.loginSession.id = (session["id"] as? String)!
                 self.onTheMapClient.loginAccount.key = (account["key"] as? String)!
-//                print("session is \(self.appDelegate.session)")
+                //                print("session is \(self.appDelegate.session)")
                 self.completeLogin()
                 self.loginButton.enabled = true
                 self.activityIndicator.stopAnimating()
+                
             })
         }
         

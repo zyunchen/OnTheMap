@@ -105,7 +105,7 @@ class OnTheMapMapViewController: UIViewController,MKMapViewDelegate {
     
     func setAnnotations(){
         var annotations = [MKPointAnnotation]()
-        for student in onTheMapClient.newStudents {
+        for student in Students.sharedInstance().students {
             let lat = CLLocationDegrees(student.latitude )
             let long = CLLocationDegrees(student.longitude )
             

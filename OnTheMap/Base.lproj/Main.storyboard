@@ -26,7 +26,7 @@
                                     <constraint firstAttribute="height" constant="44" id="fAD-f2-8YV"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="EWx-cK-31d">
                                 <rect key="frame" x="200" y="28" width="200" height="200"/>

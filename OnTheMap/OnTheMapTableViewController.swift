@@ -60,21 +60,21 @@ class OnTheMapTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return onTheMapClient.newStudents.count
+        return Students.sharedInstance().students.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-        cell.textLabel?.text = onTheMapClient.newStudents[indexPath.row].firstName + " " + onTheMapClient.newStudents[indexPath.row].lastName
-        cell.detailTextLabel?.text = onTheMapClient.newStudents[indexPath.row].mediaURL
+        cell.textLabel?.text = Students.sharedInstance().students[indexPath.row].firstName + " " + Students.sharedInstance().students[indexPath.row].lastName
+        cell.detailTextLabel?.text = Students.sharedInstance().students[indexPath.row].mediaURL
         cell.imageView?.image = UIImage(named: "pin")
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().openURL(NSURL(string: onTheMapClient.newStudents[indexPath.row].mediaURL)!)
+        UIApplication.sharedApplication().openURL(NSURL(string:Students.sharedInstance().students[indexPath.row].mediaURL)!)
     }
     
     

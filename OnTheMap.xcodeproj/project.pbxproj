@@ -10,6 +10,7 @@
 		120CD5E21C132FE8007CE39D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E11C132FE8007CE39D /* Account.swift */; };
 		120CD5E41C13FA00007CE39D /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E31C13FA00007CE39D /* Student.swift */; };
 		120CD5E61C1454CF007CE39D /* OnTheMapMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120CD5E51C1454CF007CE39D /* OnTheMapMapViewController.swift */; };
+		123C16561C4403D8003AD1DB /* Students.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123C16551C4403D8003AD1DB /* Students.swift */; };
 		127554D31C1079DB00CA0077 /* OnTheMapConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */; };
 		129067901C1320D6004E79F8 /* OnTheMapTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1290678F1C1320D6004E79F8 /* OnTheMapTableViewController.swift */; };
 		12934C071C1D611E00FDECE9 /* SubmitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12934C061C1D611E00FDECE9 /* SubmitViewController.swift */; };
@@ -45,6 +46,7 @@
 		120CD5E11C132FE8007CE39D /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		120CD5E31C13FA00007CE39D /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Student.swift; sourceTree = "<group>"; };
 		120CD5E51C1454CF007CE39D /* OnTheMapMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapMapViewController.swift; sourceTree = "<group>"; };
+		123C16551C4403D8003AD1DB /* Students.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Students.swift; sourceTree = "<group>"; };
 		127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapConstants.swift; sourceTree = "<group>"; };
 		1290678F1C1320D6004E79F8 /* OnTheMapTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnTheMapTableViewController.swift; sourceTree = "<group>"; };
 		12934C061C1D611E00FDECE9 /* SubmitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				127554D21C1079DB00CA0077 /* OnTheMapConstants.swift */,
 				120CD5E11C132FE8007CE39D /* Account.swift */,
 				120CD5E31C13FA00007CE39D /* Student.swift */,
+				123C16551C4403D8003AD1DB /* Students.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				12EA1BB61C06204300DE791D /* AppDelegate.swift in Sources */,
 				12934C071C1D611E00FDECE9 /* SubmitViewController.swift in Sources */,
 				120CD5E41C13FA00007CE39D /* Student.swift in Sources */,
+				123C16561C4403D8003AD1DB /* Students.swift in Sources */,
 				127554D31C1079DB00CA0077 /* OnTheMapConstants.swift in Sources */,
 				120CD5E21C132FE8007CE39D /* Account.swift in Sources */,
 			);
