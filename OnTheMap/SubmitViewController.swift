@@ -19,6 +19,7 @@ class SubmitViewController: UIViewController {
     @IBOutlet weak var label2: UILabel!
     @IBOutlet weak var label3: UILabel!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var tapRecognizer: UITapGestureRecognizer? = nil
     var onTheMapClient:OnTheMapClient = OnTheMapClient.sharedInstance()
@@ -39,21 +40,30 @@ class SubmitViewController: UIViewController {
             showAlert("ERROR", message: "Enter a location")
             return
         }
-        mapView.hidden = false
-        label1.hidden = true
-        label2.hidden = true
-        label3.hidden = true
-        urlTextField.hidden = false
-        submitButton.hidden = false
-       
-        locationEncode(locationTextField.text!,complete:{(loc) -> Void in
+        
+        activityIndicator.startAnimating()
+        locationEncode(locationTextField.text!,complete:{(loc,errorString) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
+                
+                guard errorString == nil else{
+                    self.showAlert("error", message: errorString)
+                    self.activityIndicator.stopAnimating()
+                    return
+                }
+                
                 let annotation = MKPointAnnotation()
-                annotation.coordinate = loc
+                annotation.coordinate = loc!
                 self.loc = loc
                 print("loc is \(loc)")
                 self.mapView.addAnnotation(annotation)
-                self.mapView.setRegion(MKCoordinateRegionMakeWithDistance(loc, 15000, 15000), animated: true)
+                self.mapView.setRegion(MKCoordinateRegionMakeWithDistance(loc!, 15000, 15000), animated: true)
+                self.activityIndicator.stopAnimating()
+                self.mapView.hidden = false
+                self.label1.hidden = true
+                self.label2.hidden = true
+                self.label3.hidden = true
+                self.urlTextField.hidden = false
+                self.submitButton.hidden = false
             }
         })
         
@@ -67,34 +77,37 @@ class SubmitViewController: UIViewController {
     
     @IBAction func didSubmit(sender: UIButton) {
         guard let loc = loc else{
-            //TODO
+            showAlert("error", message: "there is no info about location")
             return
         }
-        let body = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Cupertino, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": \(loc.latitude), \"longitude\": \(loc.longitude)}"
-        print("body is \(body)")
-        onTheMapClient.taskForPostMethod(OnTheMapClient.Server.PARSE,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
-            print(result)
-            /* GUARD: Is the "session" key in parsedResult? */
-//            guard let session = result["session"] as? [String : AnyObject] else {
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    
-//                }
-//                print("Cannot find key 'session' in \(result)")
-//                return
-//            }
-            
-//            guard let account = result["account"] as? [String : AnyObject] else {
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    
-//                }
-//                print("Cannot find key 'session' in \(result)")
-//                return
-//            }
-            
-//            print("session is \(session)")
-            self.dismissViewControllerAnimated(true, completion: nil)
-        })
-
+        
+        guard var student = onTheMapClient.currentStudent else{
+            self.showAlert("error", message: "invalid student data")
+            return
+        }
+        
+        student.latitude = loc.latitude
+        student.longitude = loc.longitude
+        student.mediaURL = urlTextField.text!
+        
+        print(student)
+        
+        if let uniqueKey = student.uniqueKey,firstName = student.firstName,lastName = student.lastName,mapString = student.mapString,mediaURL = student.mediaURL,latitude = student.latitude,
+            longtitude = student.longitude{
+                let body = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longtitude)}"
+                print("body is \(body)")
+                onTheMapClient.taskForPostMethod(OnTheMapClient.Server.PARSE,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
+                    
+                    guard result != nil else{
+                        self.showAlert("error", message: error)
+                        return
+                    }
+                    
+                    print(result)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                })
+    
+        }
         
     }
     
@@ -130,21 +143,34 @@ class SubmitViewController: UIViewController {
     }
     
     //form loaction to longitude and latitude
-    func locationEncode(location:String,complete:(loc:CLLocationCoordinate2D) -> Void ) {
+    func locationEncode(location:String,complete:(loc:CLLocationCoordinate2D?,errorString:String?) -> Void ) {
         let geocoder = CLGeocoder()
         var p:CLPlacemark!
         
         geocoder.geocodeAddressString(location) { (placemarks:[CLPlacemark]?, error:NSError?) -> Void in
+            print(placemarks)
             if error != nil {
-                //                self.textView.text = "错误：\(error.localizedDescription))"
-                //                return
+                complete(loc: nil, errorString:"can not find the place,please try again")
+                return
             }
             if let pm = placemarks {
                 if pm.count > 0{
-                    p = placemarks![0]
-                    complete(loc: (p.location?.coordinate)!)
+                    p = pm.first!
+                    print(p)
+                    if let country = p.country,state = p.administrativeArea{
+                        if let city = p.locality{
+                            self.onTheMapClient.currentStudent?.mapString = "\(city),\(state),\(country)"
+                        }else{
+                            self.onTheMapClient.currentStudent?.mapString = "\(state),\(country)"
+                        }
+                        complete(loc: (p.location?.coordinate),errorString: nil)
+                    }else{
+                       complete(loc: nil, errorString: "can not find the place,please try again")
+                    }
+                    
                 } else {
                     print("No placemarks!")
+                    complete(loc: nil, errorString: "can not find the place,please try again")
                 }
             }
             

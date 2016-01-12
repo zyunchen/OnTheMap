@@ -66,7 +66,7 @@ class OnTheMapTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-        cell.textLabel?.text = Students.sharedInstance().students[indexPath.row].firstName + " " + Students.sharedInstance().students[indexPath.row].lastName
+        cell.textLabel?.text = Students.sharedInstance().students[indexPath.row].firstName! + " " + Students.sharedInstance().students[indexPath.row].lastName!
         cell.detailTextLabel?.text = Students.sharedInstance().students[indexPath.row].mediaURL
         cell.imageView?.image = UIImage(named: "pin")
         
@@ -74,7 +74,7 @@ class OnTheMapTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().openURL(NSURL(string:Students.sharedInstance().students[indexPath.row].mediaURL)!)
+        UIApplication.sharedApplication().openURL(NSURL(string:Students.sharedInstance().students[indexPath.row].mediaURL!)!)
     }
     
     

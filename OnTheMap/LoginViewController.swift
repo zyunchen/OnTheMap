@@ -43,30 +43,10 @@ class LoginViewController: UIViewController {
                 }
                 
                 print(result)
-                /* GUARD: Is the "session" key in parsedResult? */
-                guard let session = result["session"] as? [String : AnyObject] else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.debugLabel.text = "Login Failed (check your password and email)."
-                    }
-                    self.showError("Error", message: errorString)
-                    return
-                }
-                
-                guard let account = result["account"] as? [String : AnyObject] else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.debugLabel.text = "Login Failed (check your password and email)."
-                    }
-                    self.showError("Error", message: errorString)
-                    return
-                }
-                
-                print("session is \(session)")
                 
                 /* 6. Use the data! */
-                //                self.appDelegate.session = session["id"] as? String
-                self.onTheMapClient.loginSession.id = (session["id"] as? String)!
-                self.onTheMapClient.loginAccount.key = (account["key"] as? String)!
-                //                print("session is \(self.appDelegate.session)")
+                self.onTheMapClient.currentStudent = Student(dictionary: result as! [String : AnyObject])
+                self.getPublicData()
                 self.completeLogin()
                 self.loginButton.enabled = true
                 self.activityIndicator.stopAnimating()
@@ -74,6 +54,25 @@ class LoginViewController: UIViewController {
             })
         }
         
+    }
+    
+    func getPublicData(){
+        onTheMapClient.getStudentDataWith(onTheMapClient.currentStudent!.uniqueKey) { (result, errorString) -> Void in
+            if let data = result {
+                dispatch_async(dispatch_get_main_queue()){
+                    self.onTheMapClient.currentStudent!.firstName =
+                        (data["firstName"] as? String)!
+                    self.onTheMapClient.currentStudent!.lastName =
+                        (data["lastName"] as? String)!
+                    print(self.onTheMapClient.currentStudent)
+                    self.activityIndicator.stopAnimating()
+                    self.loginButton.enabled = true
+                }
+            } else {
+                self.showError("Error", message: errorString!)
+            }
+
+        }
     }
     
     // MARK: Sign Up

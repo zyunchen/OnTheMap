@@ -287,19 +287,21 @@
                                         <color key="textColor" red="0.27673584220000003" green="0.3882593513" blue="0.60165590049999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="highlightedColor" red="0.13455258310000001" green="0.291302532" blue="0.54146701100000005" alpha="1" colorSpace="calibratedRGB"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vIw-sh-jA0">
-                                        <rect key="frame" x="17" y="21" width="506" height="24"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="please input url here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vIw-sh-jA0">
+                                        <rect key="frame" x="17" y="21" width="506" height="100"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <bool key="isElement" value="NO"/>
                                         </accessibility>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="24" id="5hS-BD-Hbe"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="EsH-Sf-Qha"/>
                                             <constraint firstAttribute="width" constant="506" id="IxO-V8-SMQ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="5hS-BD-Hbe"/>
                                                 <exclude reference="IxO-V8-SMQ"/>
                                             </mask>
                                         </variation>
@@ -341,8 +343,8 @@
                                 <rect key="frame" x="0.0" y="400" width="600" height="156"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pLV-D9-W1e">
-                                        <rect key="frame" x="245" y="53" width="111" height="30"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <rect key="frame" x="193" y="35" width="215" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <state key="normal" title="Find on the map">
                                             <color key="titleColor" red="0.20392156862745098" green="0.35294117647058826" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -379,16 +381,19 @@
                                 <rect key="frame" x="0.0" y="156" width="600" height="444"/>
                             </mapView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p3q-pl-Nwq">
-                                <rect key="frame" x="271" y="453" width="58" height="34"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="253" y="453" width="95" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Submit">
-                                    <color key="titleColor" red="0.0727358217592593" green="0.010074464979292605" blue="0.056432220024947015" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.2627450980392157" green="0.46274509803921571" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="didSubmit:" destination="7G8-Sf-y3R" eventType="touchUpInside" id="pDL-VQ-yrU"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="KII-nL-x05">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.32549019607843138" green="0.54117647058823526" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -401,10 +406,12 @@
                             <constraint firstAttribute="bottom" secondItem="NX2-7G-aZA" secondAttribute="bottom" constant="444" id="Wde-sa-pfX"/>
                             <constraint firstItem="BOl-h8-gcr" firstAttribute="trailing" secondItem="ybA-gd-gtB" secondAttribute="trailing" id="Wya-DA-d9N"/>
                             <constraint firstItem="LKP-fQ-RBN" firstAttribute="centerX" secondItem="1ey-Rr-FQB" secondAttribute="centerX" id="Zgd-KD-7do"/>
+                            <constraint firstItem="KII-nL-x05" firstAttribute="centerY" secondItem="1ey-Rr-FQB" secondAttribute="centerY" id="ZpB-s8-ogc"/>
                             <constraint firstItem="BOl-h8-gcr" firstAttribute="top" secondItem="tdd-ZU-xOW" secondAttribute="bottom" constant="134" id="aDM-ZS-ySY"/>
                             <constraint firstItem="BOl-h8-gcr" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="bottom" id="dNv-su-rSW"/>
                             <constraint firstItem="NFa-eK-GcD" firstAttribute="top" secondItem="ybA-gd-gtB" secondAttribute="bottom" id="gue-Ub-kby"/>
                             <constraint firstItem="NX2-7G-aZA" firstAttribute="trailing" secondItem="ybA-gd-gtB" secondAttribute="trailing" id="hfF-HL-kil"/>
+                            <constraint firstItem="KII-nL-x05" firstAttribute="centerX" secondItem="1ey-Rr-FQB" secondAttribute="centerX" id="mFN-zr-Lq2"/>
                             <constraint firstItem="BOl-h8-gcr" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="bottom" constant="-2" id="mo2-a2-4hS"/>
                             <constraint firstItem="p3q-pl-Nwq" firstAttribute="top" secondItem="BOl-h8-gcr" secondAttribute="bottom" constant="-147" id="nyi-bh-nJE"/>
                             <constraint firstItem="LKP-fQ-RBN" firstAttribute="top" secondItem="NX2-7G-aZA" secondAttribute="bottom" constant="15" id="o4e-aB-lOq"/>
@@ -429,6 +436,7 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="KII-nL-x05" id="CeV-iH-W2z"/>
                         <outlet property="label1" destination="GZF-zm-acw" id="uwD-km-v8S"/>
                         <outlet property="label2" destination="VfF-F9-G54" id="jdd-7g-BDV"/>
                         <outlet property="label3" destination="TVo-hL-zi6" id="Jxc-Po-8rx"/>

@@ -16,10 +16,11 @@ class OnTheMapClient : NSObject {
     /* Shared session */
     var session: NSURLSession
     
-    var loginSession: Session
+//    var loginSession: Session
     
-    var loginAccount:Account
+//    var loginAccount:Account
     
+    var currentStudent:Student?
 
     
 
@@ -33,8 +34,8 @@ class OnTheMapClient : NSObject {
     
     override init() {
         session = NSURLSession.sharedSession()
-        loginSession = Session()
-        loginAccount = Account()
+//        loginSession = Session()
+//        loginAccount = Account()
         super.init()
     }
     
@@ -65,6 +66,28 @@ class OnTheMapClient : NSObject {
         }; task.resume()
     }
     
+    func getStudentDataWith(uniqueKey: String?,  completionHandler: (result: AnyObject!, errorString: String?) -> Void){
+        
+        if let uniqueKey = uniqueKey, url = NSURL(string: Constants.BaseUrl + Methods.GetUserInfo + uniqueKey) {
+            let request =
+            NSMutableURLRequest(URL: url)
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.HTTPMethod = "GET"
+            
+            let task = session.dataTaskWithRequest(request){
+                (data, response, error) in
+                
+                if let error = error {
+                    completionHandler(result: nil, errorString: error.localizedDescription)
+                    return
+                }
+                let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5))
+                self.parseStudentDataRequest(data: newData, completionHandler: completionHandler)
+            }
+            task.resume()
+        } else { completionHandler(result: nil, errorString: "Incorrect Id") }
+    }
     
     
     // MARK: POST
@@ -99,7 +122,7 @@ class OnTheMapClient : NSObject {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
-                completionHandler(result: nil, errorString:error?.description)
+                completionHandler(result: nil, errorString:error?.localizedDescription)
                 return
             }
             
@@ -416,8 +439,9 @@ class OnTheMapClient : NSObject {
                 if let newParsedData = parsedData["account"] as? [String: AnyObject] {
                     if let hasAccount = newParsedData["registered"] as? Bool{
                         if hasAccount == true {
-                            if let _ = newParsedData["key"] as? String, _ = newParsedData["registered"] as? Bool {
-                                completionHandler(result: parsedData, errorString: nil)
+                            if let key = newParsedData["key"] as? String, registered = newParsedData["registered"] as? Bool {
+                                let dictionary: [String: AnyObject] = ["uniqueKey": key, "registered": registered]
+                                completionHandler(result: dictionary, errorString: nil)
                             } else {
                                 completionHandler(result: nil, errorString: "Unable to login")
                             }
@@ -434,6 +458,31 @@ class OnTheMapClient : NSObject {
             }
         } catch let error as NSError{
             completionHandler(result: nil, errorString: "Login Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func parseStudentDataRequest(data data: NSData, completionHandler: (result: AnyObject!, errorString: String?) -> Void){
+        do{
+            let parsedData =
+            try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? NSDictionary
+            if let parsedData = parsedData {
+                let data = parsedData["user"] as? [String: AnyObject]
+                if let data = data {
+                    if let firstName = (data["first_name"] as? String), lastName = (data["last_name"] as? String){
+                        let dic:[String: AnyObject] =
+                        ["firstName": firstName, "lastName":lastName]
+                        completionHandler(result: dic, errorString: nil)
+                    } else {
+                        completionHandler(result: nil, errorString: "Unable to get user's name")
+                    }
+                } else {
+                    completionHandler(result: nil, errorString: "Unable to get user data")
+                }
+            }else {
+                completionHandler(result: nil, errorString: "Unable to parse data")
+            }
+        } catch let error as NSError{
+            completionHandler(result: nil, errorString: error.localizedDescription)
         }
     }
 
