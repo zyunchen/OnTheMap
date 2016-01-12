@@ -96,7 +96,7 @@ class SubmitViewController: UIViewController {
             longtitude = student.longitude{
                 let body = "{\"uniqueKey\": \"\(uniqueKey)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(mapString)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(latitude), \"longitude\": \(longtitude)}"
                 print("body is \(body)")
-                onTheMapClient.taskForPostMethod(OnTheMapClient.Server.PARSE,method: OnTheMapClient.Methods.GetSession, body: body, completionHandler: { (result, error) -> Void in
+                onTheMapClient.taskForPostMethod(OnTheMapClient.Server.PARSE,method: OnTheMapClient.Methods.PostStudentInfo, body: body, completionHandler: { (result, error) -> Void in
                     
                     guard result != nil else{
                         self.showAlert("error", message: error)

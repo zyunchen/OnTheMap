@@ -369,6 +369,7 @@ class OnTheMapClient : NSObject {
             }
             
             Students.sharedInstance().students.removeAll()
+            print(students)
             
             for student in students {
                 let newstudent:Student = Student(dictionary: student)

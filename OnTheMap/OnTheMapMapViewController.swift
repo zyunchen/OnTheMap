@@ -112,9 +112,9 @@ class OnTheMapMapViewController: UIViewController,MKMapViewDelegate {
             // The lat and long are used to create a CLLocationCoordinates2D instance.
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
-            let first = student.firstName
-            let last = student.lastName
-            let mediaURL = student.mediaURL
+            let first = student.firstName!
+            let last = student.lastName!
+            let mediaURL = student.mediaURL!
             
             // Here we create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()

@@ -24,6 +24,7 @@ extension OnTheMapClient {
         static let GetSession = "session"
         static let GetUserInfo = "users/"
         static let GetStudentLocation = "StudentLocation?order=-updatedAt"
+        static let PostStudentInfo = "StudentLocation/"
         
         // MARK: Account
         static let Account = "account"
